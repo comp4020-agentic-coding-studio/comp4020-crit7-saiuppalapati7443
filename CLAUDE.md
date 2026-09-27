@@ -1,11 +1,15 @@
-# Your harness
+# CLAUDE.md — FastPrint ANU
 
-This file is yours, and it arrives empty on purpose. The rules you hold the
-agent to are part of what gets marked, so they should be rules you decided on.
+Working rules for this repo, decided during crit-7 planning.
 
-Nothing about the starter is recorded here. What the repo ships is explained
-where it lives --- `fly.toml`, the `Dockerfile`, the CI workflow and
-`spec/README.md` each say what they fix --- and the
-[course website](https://comp.anu.edu.au/courses/comp4020-agentic-coding-studio/)
-publishes this deliverable's brief and spec. Read them before you plan or build;
-what the agent needs to carry from any of it is your call.
+- Schema changes go `schema.ts` → `pnpm db:generate` → commit the migration together with the schema change. Never hand-edit `drizzle/`.
+- Queue depth and printer busy/idle are always derived from `print_jobs` at query time, never stored.
+- `printing → completed` is computed from `released_at` and the duration formula at read time; never a timer.
+- Every new page is added to `spec/routes.ts` in the same commit.
+- Every page keeps one `<h1>`, a labelled `<nav>`, a real `<title>`, alt text on every image; never weaken `invariants.test.ts` to pass.
+- `/readme/` serves the full current `README.md`.
+- Keep `/api/events` streaming; repurpose its payload, never remove it.
+- Keep `/` server-rendered and `astro.config.ts` security settings unchanged.
+- Delete `guestbook.test.ts` only once the print-job tests cover persistence and live broadcast.
+- `pnpm check` is green before every commit; one feature per commit.
+- Ask before adding a dependency or changing scope.
