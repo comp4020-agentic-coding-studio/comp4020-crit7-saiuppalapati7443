@@ -9,19 +9,19 @@ Reay libraries.
 
 I use the ANU Web Print portal most weeks, and three things about it wear me
 down: it hangs on file uploads often enough that I've learned to expect it.
-[CONFIRM] It shows queues of 100+ jobs that aren't real — numbers that never
-seem to go down even when the printer is plainly idle. [CONFIRM] And it never
+It shows queues of 100+ jobs that aren't real — numbers that never
+seem to go down even when the printer is plainly idle. And it never
 tells me that a printer two floors away, or in the next building, is actually
-free right now. [CONFIRM] Those three are what this prototype is built to fix,
-and nothing else. [CONFIRM]
+free right now. Those three are what this prototype is built to fix,
+and nothing else.
 
 ## What good looks like here
 
 **The queue count and the busy/idle status you see are never stored — they're
 recomputed from the print jobs themselves every time the page loads or a
-client is listening live.** This is the actual fix for the first two pain
-points: the real portal's queue and status are numbers someone/something has
-to remember to update, and they drift. [CONFIRM] Here there's no counter to
+client is listening live.** This is the fix for the second and third pain
+points: the real portal's queue and printer status are numbers something has
+to remember to update, and they drift. Here there's no counter to
 drift, because there's no counter — a printer's queue depth is a count of its
 unfinished jobs, computed on read, and "busy" falls out of that same count.
 A print job's move from `printing` to `completed` is computed the same way,
@@ -55,13 +55,15 @@ oversight.
 ## What I chose not to build
 
 No real file uploads — a job is a declared file name and page count, not an
-actual document, because the pain point was the queue lying to me, not the
-upload pipe. [CONFIRM] No PDF parsing, for the same reason: nothing here needs
+actual document. That's also how this fixes the first pain point: there's no
+upload to hang, and the job is saved to the database the moment I submit it.
+No PDF parsing, for the same reason: nothing here needs
 to open the file to know how long it takes to print. No payments or print
 quotas — ANU printing has a real dollar balance, and it's a whole system of
 its own that isn't one of the three things that actually bother me.
-[CONFIRM] No real printer integration — nothing here talks to an actual
-device over IPP or a driver; every status is the seed data. And no real ANU
+No real printer integration — nothing here talks to an actual device over IPP
+or a driver. Whether a printer is offline and its paper level come from seed
+data; whether it's busy or idle comes from the jobs released to it. And no real ANU
 authentication — see above.
 
 ## What's enforced, and by what
@@ -77,6 +79,5 @@ authentication — see above.
   text, an accessibility floor) and the promise that this page carries the
   whole of this file.
 - **Judgement, at the crit:** whether the dashboard is actually clear, whether
-  the printer names and locations read as real, whether an hour of using it
-  would have saved me the trip to a printer that turns out to be offline.
-  [CONFIRM]
+  the printer names and locations read as real, and whether it would have
+  saved me walking to a printer that turned out to be offline.
