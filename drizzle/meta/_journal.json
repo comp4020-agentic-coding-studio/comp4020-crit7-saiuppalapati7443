@@ -15,6 +15,13 @@
       "when": 1790499948287,
       "tag": "0001_chunky_senator_kelly",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1790503939945,
+      "tag": "0002_simple_chamber",
+      "breakpoints": true
     }
   ]
 }

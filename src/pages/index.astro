@@ -1,10 +1,8 @@
 ---
-import { listMessages } from "../lib/db";
 import { IDENTITY_COOKIE } from "../lib/identity";
 import { derivePrinterStates, jobsForOwner } from "../lib/printjobs";
 import "../styles.css";
 
-const messages = listMessages();
 const ownerId = Astro.cookies.get(IDENTITY_COOKIE)?.value ?? null;
 const printerStates = derivePrinterStates();
 const myJobs = ownerId ? jobsForOwner(ownerId) : [];
@@ -128,32 +126,13 @@ const cancellable = (status: string) => status === "ready_to_release" || status 
           </section>
         )
       }
-
-      <section aria-labelledby="guestbook-heading">
-        <h2 id="guestbook-heading">Guestbook (starter demo, removed next commit)</h2>
-        <form method="post" action="/api/messages">
-          <label for="body">Leave a message</label>
-          <input id="body" name="body" required maxlength="500" />
-          <button>Sign</button>
-        </form>
-        <ul id="messages">
-          {messages.map((message) => <li>{message.body}</li>)}
-        </ul>
-      </section>
     </main>
     <script>
-      // The live half of the demo: subscribe to the SSE stream and update the
-      // page as events arrive. Every form here needs none of this — each
-      // POST + redirect re-renders the submitting tab from SQLite; this
-      // stream is how every *other* open tab finds out.
-      const list = document.querySelector("#messages");
+      // The live half of the dashboard: subscribe to the SSE stream and
+      // update printer status/queue counts as events arrive. Every form here
+      // needs none of this — each POST + redirect re-renders the submitting
+      // tab from SQLite; this stream is how every *other* open tab finds out.
       const source = new EventSource("/api/events");
-      source.addEventListener("message", (event) => {
-        const message = JSON.parse(event.data);
-        const item = document.createElement("li");
-        item.textContent = message.body;
-        list?.prepend(item);
-      });
       source.addEventListener("printers", (event) => {
         const printerStates = JSON.parse(event.data);
         for (const printer of printerStates) {

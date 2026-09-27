@@ -1,5 +1,4 @@
 import type { APIRoute } from "astro";
-import type { Message } from "../../lib/db";
 import { bus } from "../../lib/events";
 import type { PrinterState } from "../../lib/printjobs";
 
@@ -9,7 +8,6 @@ import type { PrinterState } from "../../lib/printjobs";
 // the simplest live channel that works everywhere — reach for WebSockets
 // only when the client needs to push over the same connection.
 export const GET: APIRoute = () => {
-  let onMessage: (message: Message) => void;
   let onPrinters: (printers: PrinterState[]) => void;
   let heartbeat: ReturnType<typeof setInterval>;
 
@@ -20,20 +18,13 @@ export const GET: APIRoute = () => {
       // connection as idle
       controller.enqueue(": connected\n\n");
       heartbeat = setInterval(() => controller.enqueue(": ping\n\n"), 30_000);
-      onMessage = (message) => {
-        controller.enqueue(`data: ${JSON.stringify(message)}\n\n`);
-      };
-      // a named event type, so it never collides with the guestbook's
-      // unnamed "message" event on the same connection
       onPrinters = (printers) => {
         controller.enqueue(`event: printers\ndata: ${JSON.stringify(printers)}\n\n`);
       };
-      bus.on("message", onMessage);
       bus.on("printers", onPrinters);
     },
     cancel() {
       clearInterval(heartbeat);
-      bus.off("message", onMessage);
       bus.off("printers", onPrinters);
     },
   });
