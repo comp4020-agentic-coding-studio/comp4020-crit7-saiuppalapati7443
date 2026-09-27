@@ -12,7 +12,14 @@ main {
 }
 
 a {
-  color: #0b5fff;
+  color: #0747a6;
+  text-underline-offset: 0.15em;
+}
+
+nav {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
 form {
@@ -23,18 +30,63 @@ form {
   margin-block: 1.5rem;
 }
 
-input {
+label {
+  font-weight: 600;
+}
+
+input,
+select {
   flex: 1;
   min-width: 12rem;
-  padding: 0.4rem 0.6rem;
+  padding: 0.5rem 0.6rem;
   font: inherit;
+  border: 1px solid #57606a;
+  border-radius: 0.25rem;
 }
 
 button {
-  padding: 0.4rem 1rem;
+  padding: 0.6rem 1.2rem;
   font: inherit;
+  min-height: 2.75rem;
+  border: 1px solid #57606a;
+  border-radius: 0.25rem;
+  background: #f0f2f5;
 }
 
-#messages {
+button:hover {
+  background: #e2e6ea;
+}
+
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+button:focus-visible {
+  outline: 3px solid #0747a6;
+  outline-offset: 2px;
+}
+
+ul {
   padding-inline-start: 1.2rem;
+}
+
+li {
+  margin-block: 0.5rem;
+}
+
+@media (max-width: 30rem) {
+  body {
+    padding: 1rem;
+  }
+
+  form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  input,
+  select,
+  button {
+    min-width: 0;
+    width: 100%;
+  }
 }
